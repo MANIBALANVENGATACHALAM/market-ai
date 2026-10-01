@@ -151,6 +151,20 @@
             <span>Resistance</span>
             <strong id="resistance">--</strong>
         </div>
+        <div class="info">
+    <span>RSI 14</span>
+    <strong id="rsi">--</strong>
+</div>
+
+<div class="info">
+    <span>EMA 20</span>
+    <strong id="ema20">--</strong>
+</div>
+
+<div class="info">
+    <span>EMA 50</span>
+    <strong id="ema50">--</strong>
+</div>
 
         <div class="info">
             <span>Market Signal</span>
@@ -206,6 +220,14 @@ document.getElementById("resistance").textContent =
 
 document.getElementById("marketSignal").textContent =
     data.analysis.signal;
+document.getElementById("rsi").textContent =
+    data.analysis.rsi14.toFixed(2);
+
+document.getElementById("ema20").textContent =
+    data.analysis.ema20.toFixed(2);
+
+document.getElementById("ema50").textContent =
+    data.analysis.ema50.toFixed(2);
         /* Current price */
 
         document.querySelector(".price").textContent =

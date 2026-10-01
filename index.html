@@ -168,7 +168,7 @@
 const canvas = document.getElementById("marketCanvas");
 const ctx = canvas.getContext("2d");
 
-function drawDemoChart() {
+async function drawDemoChart() {
     canvas.width = canvas.clientWidth * devicePixelRatio;
     canvas.height = canvas.clientHeight * devicePixelRatio;
 
@@ -179,11 +179,16 @@ function drawDemoChart() {
 
     ctx.clearRect(0, 0, width, height);
 
-    const prices = [
-        22500, 22580, 22540, 22650,
-        22620, 22700, 22640, 22780,
-        22720, 22820, 22750, 22900
-    ];
+    const response = await fetch(
+    "https://script.google.com/macros/s/AKfycbxBaiPC7wP-y4U3y_bfEpsfq2BlMmVi0yHa2r-PAQAY6eH07BArhib92Tcg06Z8Q28Zsw/exec"
+);
+
+const data = await response.json();
+
+const prices = data.history.map(item => item.price);
+
+document.querySelector(".price").textContent =
+    data.price.toFixed(2);
 
     const min = Math.min(...prices);
     const max = Math.max(...prices);

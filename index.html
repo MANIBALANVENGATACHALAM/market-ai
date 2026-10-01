@@ -52,15 +52,18 @@
         }
 
         .chart {
-            height: 250px;
-            background: #171b24;
-            border-radius: 15px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 15px;
-            color: #888;
-        }
+    height: 300px;
+    background: #171b24;
+    border-radius: 15px;
+    margin-bottom: 15px;
+    padding: 10px;
+    box-sizing: border-box;
+}
+
+#marketCanvas {
+    width: 100%;
+    height: 100%;
+}
 
         .analysis {
             background: #171b24;
@@ -120,8 +123,7 @@
         </div>
 
         <div class="chart" id="niftyChart">
-<div class="chart" id="niftyChart">
-    📈 Market chart will appear here
+    <canvas id="marketCanvas"></canvas>
 </div>
 
         <div class="analysis">
@@ -162,6 +164,49 @@
         </div>
 
     </div>
+<script>
+const canvas = document.getElementById("marketCanvas");
+const ctx = canvas.getContext("2d");
 
+function drawDemoChart() {
+    canvas.width = canvas.clientWidth * devicePixelRatio;
+    canvas.height = canvas.clientHeight * devicePixelRatio;
+
+    ctx.scale(devicePixelRatio, devicePixelRatio);
+
+    const width = canvas.clientWidth;
+    const height = canvas.clientHeight;
+
+    ctx.clearRect(0, 0, width, height);
+
+    const prices = [
+        22500, 22580, 22540, 22650,
+        22620, 22700, 22640, 22780,
+        22720, 22820, 22750, 22900
+    ];
+
+    const min = Math.min(...prices);
+    const max = Math.max(...prices);
+
+    ctx.beginPath();
+
+    prices.forEach((price, i) => {
+        const x = (i / (prices.length - 1)) * width;
+        const y = height - ((price - min) / (max - min)) * (height - 30) - 15;
+
+        if (i === 0) {
+            ctx.moveTo(x, y);
+        } else {
+            ctx.lineTo(x, y);
+        }
+    });
+
+    ctx.strokeStyle = "#00d084";
+    ctx.lineWidth = 3;
+    ctx.stroke();
+}
+
+drawDemoChart();
+</script>
 </body>
 </html>

@@ -7,7 +7,6 @@
 <title>Market AI</title>
 
 <style>
-
 body {
     margin: 0;
     font-family: Arial, sans-serif;
@@ -117,7 +116,6 @@ button:active {
     font-size: 13px;
     line-height: 1.5;
 }
-
 </style>
 </head>
 
@@ -133,8 +131,8 @@ button:active {
     <!-- MARKET SELECT -->
 
     <select id="marketSelect" onchange="changeMarket()">
-        <option value="NIFTY 50">NIFTY 50</option>
-        <option value="BANK NIFTY">BANK NIFTY</option>
+        <option value="NIFTY">NIFTY 50</option>
+        <option value="BANKNIFTY">BANK NIFTY</option>
         <option value="SENSEX">SENSEX</option>
     </select>
 
@@ -143,7 +141,7 @@ button:active {
 
     <div class="price-box">
 
-        <p>Current Price</p>
+        <p id="marketName">NIFTY 50</p>
 
         <div class="price" id="currentPrice">
             --
@@ -157,9 +155,7 @@ button:active {
     <!-- GRAPH -->
 
     <div class="chart">
-
         <canvas id="marketCanvas"></canvas>
-
     </div>
 
 
@@ -223,7 +219,7 @@ button:active {
 
 
         <button onclick="loadMarketData()">
-            REFRESH ANALYSIS
+            🔄 REFRESH ANALYSIS
         </button>
 
     </div>
@@ -236,7 +232,7 @@ button:active {
         <h2>📌 My Position</h2>
 
         <p class="note">
-            Enter your trade details to monitor the position.
+            Enter your trade details to monitor your position.
         </p>
 
 
@@ -275,10 +271,7 @@ button:active {
         </button>
 
 
-        <div
-            class="position-status"
-            id="positionStatus"
-        >
+        <div class="position-status" id="positionStatus">
             NO POSITION
         </div>
 
@@ -324,12 +317,12 @@ button:active {
 ========================================= */
 
 const API_URL =
-"https://script.google.com/macros/s/AKfycbzMiRK6wsYpqekr4WkW-eIOBgHded5-aN6i8cZ21p69Bt-gUj_1PAIbqhlUA9uYnRz0fw/exec";
+"https://script.google.com/macros/s/AKfycbxBaiPC7wP-y4U3y_bfEpsfq2BlMmVi0yHa2r-PAQAY6eH07BArhib92Tcg06Z8Q28Zsw/exec";
 
 
 let prices = [];
 
-let selectedMarket = "NIFTY 50";
+let selectedMarket = "NIFTY";
 
 
 /* =========================================
@@ -369,8 +362,18 @@ async function loadMarketData() {
             "LOADING...";
 
 
+        /*
+         * Send selected market to Google Apps Script
+         */
+
+        const url =
+            API_URL +
+            "?symbol=" +
+            encodeURIComponent(selectedMarket);
+
+
         const response =
-            await fetch(API_URL);
+            await fetch(url);
 
 
         const data =
@@ -382,13 +385,23 @@ async function loadMarketData() {
             document.getElementById("trendSignal").textContent =
                 "DATA ERROR";
 
+            console.log(data);
+
             return;
         }
 
 
-        /*
-         * Current price
-         */
+        /* Market name */
+
+        document.getElementById("marketName").textContent =
+            data.symbol === "NIFTY"
+                ? "NIFTY 50"
+                : data.symbol === "BANKNIFTY"
+                ? "BANK NIFTY"
+                : "SENSEX";
+
+
+        /* Current price */
 
         document.getElementById("currentPrice").textContent =
             Number(data.price).toFixed(2);
@@ -398,9 +411,7 @@ async function loadMarketData() {
             Number(data.price).toFixed(2);
 
 
-        /*
-         * History
-         */
+        /* History */
 
         prices =
             data.history.map(function(item) {
@@ -410,9 +421,7 @@ async function loadMarketData() {
             });
 
 
-        /*
-         * Technical analysis
-         */
+        /* Technical analysis */
 
         if (data.analysis) {
 
@@ -425,23 +434,33 @@ async function loadMarketData() {
 
 
             document.getElementById("support").textContent =
-                Number(data.analysis.support).toFixed(2);
+                data.analysis.support !== null
+                ? Number(data.analysis.support).toFixed(2)
+                : "--";
 
 
             document.getElementById("resistance").textContent =
-                Number(data.analysis.resistance).toFixed(2);
+                data.analysis.resistance !== null
+                ? Number(data.analysis.resistance).toFixed(2)
+                : "--";
 
 
             document.getElementById("rsi").textContent =
-                Number(data.analysis.rsi14).toFixed(2);
+                data.analysis.rsi14 !== null
+                ? Number(data.analysis.rsi14).toFixed(2)
+                : "--";
 
 
             document.getElementById("ema20").textContent =
-                Number(data.analysis.ema20).toFixed(2);
+                data.analysis.ema20 !== null
+                ? Number(data.analysis.ema20).toFixed(2)
+                : "--";
 
 
             document.getElementById("ema50").textContent =
-                Number(data.analysis.ema50).toFixed(2);
+                data.analysis.ema50 !== null
+                ? Number(data.analysis.ema50).toFixed(2)
+                : "--";
 
 
             document.getElementById("marketSignal").textContent =
@@ -450,15 +469,13 @@ async function loadMarketData() {
         }
 
 
-        /*
-         * Draw graph
-         */
+        /* Draw graph */
 
         drawChart();
 
 
         console.log(
-            selectedMarket,
+            data.symbol,
             data.price
         );
 
@@ -487,9 +504,7 @@ async function loadMarketData() {
 function drawChart() {
 
     if (!prices || prices.length < 2) {
-
         return;
-
     }
 
 
@@ -608,11 +623,7 @@ function monitorPosition() {
         );
 
 
-    if (
-        !entry ||
-        !target ||
-        !stop
-    ) {
+    if (!entry || !target || !stop) {
 
         document.getElementById("positionStatus").textContent =
             "ENTER ALL VALUES";
@@ -665,21 +676,12 @@ function monitorPosition() {
     let status;
 
 
-    /*
-     * Target reached
-     */
-
     if (current >= target) {
 
         status =
             "🎯 TARGET REACHED";
 
     }
-
-
-    /*
-     * Stop loss reached
-     */
 
     else if (current <= stop) {
 
@@ -688,11 +690,6 @@ function monitorPosition() {
 
     }
 
-
-    /*
-     * Profit
-     */
-
     else if (current > entry) {
 
         status =
@@ -700,22 +697,12 @@ function monitorPosition() {
 
     }
 
-
-    /*
-     * Loss
-     */
-
     else if (current < entry) {
 
         status =
             "📉 IN LOSS";
 
     }
-
-
-    /*
-     * Entry
-     */
 
     else {
 
@@ -732,11 +719,15 @@ function monitorPosition() {
 
 
 /* =========================================
-   AUTO REFRESH
+   START
 ========================================= */
 
 loadMarketData();
 
+
+/* =========================================
+   AUTO REFRESH EVERY 60 SECONDS
+========================================= */
 
 setInterval(function() {
 

@@ -189,7 +189,23 @@ async function loadMarketData() {
             console.log("API error");
             return;
         }
+         document.getElementById("trendSignal").textContent =
+    data.analysis.trend;
 
+document.getElementById("direction").textContent =
+    data.analysis.trend;
+
+document.getElementById("analysisPrice").textContent =
+    data.price.toFixed(2);
+
+document.getElementById("support").textContent =
+    data.analysis.support.toFixed(2);
+
+document.getElementById("resistance").textContent =
+    data.analysis.resistance.toFixed(2);
+
+document.getElementById("marketSignal").textContent =
+    data.analysis.signal;
         /* Current price */
 
         document.querySelector(".price").textContent =

@@ -1,160 +1,160 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <meta charset="UTF-8">
+<title>Market AI</title>
 
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
+<style>
 
-    <title>Market AI</title>
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #10131a;
+    color: white;
+}
 
-    <style>
+.header {
+    padding: 20px;
+    text-align: center;
+    background: #171b24;
+}
 
-        body {
-            margin: 0;
-            font-family: Arial, sans-serif;
-            background: #10131a;
-            color: white;
-        }
+.header h1 {
+    margin: 0;
+}
 
-        .header {
-            padding: 20px;
-            text-align: center;
-            background: #171b24;
-        }
+.container {
+    padding: 15px;
+    max-width: 600px;
+    margin: auto;
+}
 
-        .header h1 {
-            margin: 0;
-        }
+select,
+input {
+    width: 100%;
+    padding: 14px;
+    border-radius: 10px;
+    border: none;
+    font-size: 16px;
+    margin-bottom: 12px;
+    box-sizing: border-box;
+}
 
-        .container {
-            padding: 15px;
-            max-width: 600px;
-            margin: auto;
-        }
+.price-box,
+.chart,
+.analysis,
+.position-box {
+    background: #171b24;
+    border-radius: 15px;
+    margin-bottom: 15px;
+}
 
-        select {
-            width: 100%;
-            padding: 14px;
-            border-radius: 10px;
-            border: none;
-            font-size: 16px;
-            margin-bottom: 15px;
-        }
+.price-box {
+    padding: 20px;
+}
 
-        .price-box,
-        .chart,
-        .analysis {
-            background: #171b24;
-            border-radius: 15px;
-            margin-bottom: 15px;
-        }
+.price {
+    font-size: 32px;
+    font-weight: bold;
+}
 
-        .price-box {
-            padding: 20px;
-        }
+.chart {
+    height: 300px;
+    padding: 10px;
+    box-sizing: border-box;
+}
 
-        .price {
-            font-size: 32px;
-            font-weight: bold;
-        }
+#marketCanvas {
+    width: 100%;
+    height: 100%;
+}
 
-        .chart {
-            height: 300px;
-            padding: 10px;
-            box-sizing: border-box;
-        }
+.analysis,
+.position-box {
+    padding: 20px;
+}
 
-        #marketCanvas {
-            width: 100%;
-            height: 100%;
-        }
+.signal {
+    font-size: 28px;
+    font-weight: bold;
+    text-align: center;
+    margin: 15px 0;
+}
 
-        .analysis {
-            padding: 20px;
-        }
+.info {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 0;
+    border-bottom: 1px solid #292e38;
+}
 
-        .signal {
-            font-size: 28px;
-            font-weight: bold;
-            text-align: center;
-            margin: 15px 0;
-        }
+button {
+    width: 100%;
+    padding: 15px;
+    border: none;
+    border-radius: 10px;
+    background: #2563eb;
+    color: white;
+    font-size: 17px;
+    margin-top: 10px;
+}
 
-        .info {
-            display: flex;
-            justify-content: space-between;
-            padding: 10px 0;
-            border-bottom: 1px solid #292e38;
-        }
+button:active {
+    transform: scale(0.98);
+}
 
-        button {
-            width: 100%;
-            padding: 15px;
-            border: none;
-            border-radius: 10px;
-            background: #2563eb;
-            color: white;
-            font-size: 17px;
-            margin-top: 15px;
-        }
+.position-status {
+    font-size: 24px;
+    font-weight: bold;
+    text-align: center;
+    margin: 15px 0;
+}
 
-        .status {
-            text-align: center;
-            color: #888;
-            margin-top: 10px;
-        }
+.note {
+    color: #aeb4c0;
+    font-size: 13px;
+    line-height: 1.5;
+}
 
-    </style>
-
+</style>
 </head>
-
 
 <body>
 
-
 <div class="header">
-
     <h1>📊 Market AI</h1>
-
-    <p>Live Market Analysis</p>
-
+    <p>Market Analysis & Position Monitor</p>
 </div>
-
 
 <div class="container">
 
+    <!-- MARKET SELECT -->
 
-    <select id="marketSelect">
-
-        <option value="NIFTY 50">
-            NIFTY 50
-        </option>
-
-        <option value="SENSEX">
-            SENSEX
-        </option>
-
+    <select id="marketSelect" onchange="changeMarket()">
+        <option value="NIFTY 50">NIFTY 50</option>
+        <option value="BANK NIFTY">BANK NIFTY</option>
+        <option value="SENSEX">SENSEX</option>
     </select>
 
+
+    <!-- CURRENT PRICE -->
 
     <div class="price-box">
 
         <p>Current Price</p>
 
-        <div class="price"
-             id="currentPrice">
+        <div class="price" id="currentPrice">
             --
         </div>
 
-        <p>
-            Live market data
-        </p>
+        <p>Live market data</p>
 
     </div>
 
+
+    <!-- GRAPH -->
 
     <div class="chart">
 
@@ -163,183 +163,210 @@
     </div>
 
 
+    <!-- MARKET ANALYSIS -->
+
     <div class="analysis">
 
-        <h2>
-            AI Market Analysis
-        </h2>
+        <h2>AI Market Analysis</h2>
 
-
-        <div class="signal"
-             id="trendSignal">
-
+        <div class="signal" id="trendSignal">
             ANALYSING...
-
         </div>
 
 
         <div class="info">
-
-            <span>
-                Direction
-            </span>
-
-            <strong id="direction">
-                --
-            </strong>
-
+            <span>Direction</span>
+            <strong id="direction">--</strong>
         </div>
 
 
         <div class="info">
-
-            <span>
-                Current Price
-            </span>
-
-            <strong id="analysisPrice">
-                --
-            </strong>
-
+            <span>Current Price</span>
+            <strong id="analysisPrice">--</strong>
         </div>
 
 
         <div class="info">
-
-            <span>
-                Support
-            </span>
-
-            <strong id="support">
-                --
-            </strong>
-
+            <span>Support</span>
+            <strong id="support">--</strong>
         </div>
 
 
         <div class="info">
-
-            <span>
-                Resistance
-            </span>
-
-            <strong id="resistance">
-                --
-            </strong>
-
+            <span>Resistance</span>
+            <strong id="resistance">--</strong>
         </div>
 
 
         <div class="info">
-
-            <span>
-                RSI 14
-            </span>
-
-            <strong id="rsi">
-                --
-            </strong>
-
+            <span>RSI 14</span>
+            <strong id="rsi">--</strong>
         </div>
 
 
         <div class="info">
-
-            <span>
-                EMA 20
-            </span>
-
-            <strong id="ema20">
-                --
-            </strong>
-
+            <span>EMA 20</span>
+            <strong id="ema20">--</strong>
         </div>
 
 
         <div class="info">
-
-            <span>
-                EMA 50
-            </span>
-
-            <strong id="ema50">
-                --
-            </strong>
-
+            <span>EMA 50</span>
+            <strong id="ema50">--</strong>
         </div>
 
 
         <div class="info">
-
-            <span>
-                Market Signal
-            </span>
-
-            <strong id="marketSignal">
-                --
-            </strong>
-
+            <span>Market Signal</span>
+            <strong id="marketSignal">--</strong>
         </div>
 
 
-        <button onclick="analyseMarket()">
-
-            ANALYSE MARKET
-
+        <button onclick="loadMarketData()">
+            REFRESH ANALYSIS
         </button>
-
-
-        <div class="status"
-             id="status">
-
-            Connecting to market...
-
-        </div>
-
 
     </div>
 
 
-</div>
+    <!-- POSITION MONITOR -->
 
+    <div class="position-box">
+
+        <h2>📌 My Position</h2>
+
+        <p class="note">
+            Enter your trade details to monitor the position.
+        </p>
+
+
+        <label>Entry Price</label>
+
+        <input
+            type="number"
+            id="entryPrice"
+            placeholder="Example: 22400"
+            step="0.01"
+        >
+
+
+        <label>Target Price</label>
+
+        <input
+            type="number"
+            id="targetPrice"
+            placeholder="Example: 22500"
+            step="0.01"
+        >
+
+
+        <label>Stop Loss</label>
+
+        <input
+            type="number"
+            id="stopLoss"
+            placeholder="Example: 22350"
+            step="0.01"
+        >
+
+
+        <button onclick="monitorPosition()">
+            MONITOR POSITION
+        </button>
+
+
+        <div
+            class="position-status"
+            id="positionStatus"
+        >
+            NO POSITION
+        </div>
+
+
+        <div class="info">
+            <span>Entry</span>
+            <strong id="positionEntry">--</strong>
+        </div>
+
+
+        <div class="info">
+            <span>Current</span>
+            <strong id="positionCurrent">--</strong>
+        </div>
+
+
+        <div class="info">
+            <span>Target</span>
+            <strong id="positionTarget">--</strong>
+        </div>
+
+
+        <div class="info">
+            <span>Stop Loss</span>
+            <strong id="positionStop">--</strong>
+        </div>
+
+
+        <div class="info">
+            <span>P/L Points</span>
+            <strong id="positionPL">--</strong>
+        </div>
+
+    </div>
+
+</div>
 
 
 <script>
 
-
-/* =========================
-   GOOGLE APPS SCRIPT API
-   ========================= */
+/* =========================================
+   MARKET API
+========================================= */
 
 const API_URL =
 "https://script.google.com/macros/s/AKfycbzMiRK6wsYpqekr4WkW-eIOBgHded5-aN6i8cZ21p69Bt-gUj_1PAIbqhlUA9uYnRz0fw/exec";
 
 
-/* =========================
-   VARIABLES
-   ========================= */
-
 let prices = [];
 
+let selectedMarket = "NIFTY 50";
+
+
+/* =========================================
+   CANVAS
+========================================= */
 
 const canvas =
-    document.getElementById("marketCanvas");
+document.getElementById("marketCanvas");
 
 const ctx =
-    canvas.getContext("2d");
+canvas.getContext("2d");
 
 
-/* =========================
+/* =========================================
+   CHANGE MARKET
+========================================= */
+
+function changeMarket() {
+
+    selectedMarket =
+        document.getElementById("marketSelect").value;
+
+    loadMarketData();
+
+}
+
+
+/* =========================================
    LOAD MARKET DATA
-   ========================= */
+========================================= */
 
 async function loadMarketData() {
 
     try {
 
-        document.getElementById("status")
-            .textContent =
-            "Loading market data...";
+        document.getElementById("trendSignal").textContent =
+            "LOADING...";
 
 
         const response =
@@ -352,32 +379,28 @@ async function loadMarketData() {
 
         if (data.status !== "OK") {
 
-            document.getElementById("status")
-                .textContent =
-                "Market data error";
+            document.getElementById("trendSignal").textContent =
+                "DATA ERROR";
 
             return;
-
         }
 
 
-        /* =========================
-           CURRENT PRICE
-           ========================= */
+        /*
+         * Current price
+         */
 
-        document.getElementById("currentPrice")
-            .textContent =
+        document.getElementById("currentPrice").textContent =
             Number(data.price).toFixed(2);
 
 
-        document.getElementById("analysisPrice")
-            .textContent =
+        document.getElementById("analysisPrice").textContent =
             Number(data.price).toFixed(2);
 
 
-        /* =========================
-           HISTORY
-           ========================= */
+        /*
+         * History
+         */
 
         prices =
             data.history.map(function(item) {
@@ -387,77 +410,57 @@ async function loadMarketData() {
             });
 
 
-        /* =========================
-           BACKEND ANALYSIS
-           ========================= */
+        /*
+         * Technical analysis
+         */
 
         if (data.analysis) {
 
-
-            document.getElementById("trendSignal")
-                .textContent =
-                data.analysis.trend;
+            document.getElementById("trendSignal").textContent =
+                data.analysis.trend || "--";
 
 
-            document.getElementById("direction")
-                .textContent =
-                data.analysis.trend;
+            document.getElementById("direction").textContent =
+                data.analysis.trend || "--";
 
 
-            document.getElementById("support")
-                .textContent =
-                Number(data.analysis.support)
-                .toFixed(2);
+            document.getElementById("support").textContent =
+                Number(data.analysis.support).toFixed(2);
 
 
-            document.getElementById("resistance")
-                .textContent =
-                Number(data.analysis.resistance)
-                .toFixed(2);
+            document.getElementById("resistance").textContent =
+                Number(data.analysis.resistance).toFixed(2);
 
 
-            document.getElementById("rsi")
-                .textContent =
-                Number(data.analysis.rsi14)
-                .toFixed(2);
+            document.getElementById("rsi").textContent =
+                Number(data.analysis.rsi14).toFixed(2);
 
 
-            document.getElementById("ema20")
-                .textContent =
-                Number(data.analysis.ema20)
-                .toFixed(2);
+            document.getElementById("ema20").textContent =
+                Number(data.analysis.ema20).toFixed(2);
 
 
-            document.getElementById("ema50")
-                .textContent =
-                Number(data.analysis.ema50)
-                .toFixed(2);
+            document.getElementById("ema50").textContent =
+                Number(data.analysis.ema50).toFixed(2);
 
 
-            document.getElementById("marketSignal")
-                .textContent =
-                data.analysis.signal;
+            document.getElementById("marketSignal").textContent =
+                data.analysis.signal || "--";
 
         }
 
 
-        /* =========================
-           DRAW GRAPH
-           ========================= */
+        /*
+         * Draw graph
+         */
 
         drawChart();
 
 
-        document.getElementById("status")
-            .textContent =
-            "Market data updated";
-
-
         console.log(
-            "Market data:",
-            data
+            selectedMarket,
+            data.price
         );
-
 
     }
 
@@ -469,26 +472,21 @@ async function loadMarketData() {
         );
 
 
-        document.getElementById("status")
-            .textContent =
-            "Unable to connect to market data";
+        document.getElementById("trendSignal").textContent =
+            "CONNECTION ERROR";
 
     }
 
 }
 
 
-/* =========================
+/* =========================================
    DRAW GRAPH
-   ========================= */
+========================================= */
 
 function drawChart() {
 
-
-    if (
-        !prices ||
-        prices.length === 0
-    ) {
+    if (!prices || prices.length < 2) {
 
         return;
 
@@ -496,20 +494,18 @@ function drawChart() {
 
 
     canvas.width =
-        canvas.clientWidth *
-        window.devicePixelRatio;
+        canvas.clientWidth * devicePixelRatio;
 
 
     canvas.height =
-        canvas.clientHeight *
-        window.devicePixelRatio;
+        canvas.clientHeight * devicePixelRatio;
 
 
     ctx.setTransform(
-        window.devicePixelRatio,
+        devicePixelRatio,
         0,
         0,
-        window.devicePixelRatio,
+        devicePixelRatio,
         0,
         0
     );
@@ -546,46 +542,33 @@ function drawChart() {
     ctx.beginPath();
 
 
-    prices.forEach(
-        function(price, i) {
+    prices.forEach(function(price, i) {
+
+        const x =
+            (i / (prices.length - 1)) *
+            width;
 
 
-            const x =
-                (i /
-                (prices.length - 1))
-                * width;
+        const y =
+            height -
+            ((price - min) / range) *
+            (height - 30) -
+            15;
 
 
-            const y =
-                height -
-                (
-                    (price - min)
-                    / range
-                )
-                * (height - 30)
-                - 15;
+        if (i === 0) {
 
-
-            if (i === 0) {
-
-                ctx.moveTo(
-                    x,
-                    y
-                );
-
-            }
-
-            else {
-
-                ctx.lineTo(
-                    x,
-                    y
-                );
-
-            }
+            ctx.moveTo(x, y);
 
         }
-    );
+
+        else {
+
+            ctx.lineTo(x, y);
+
+        }
+
+    });
 
 
     ctx.strokeStyle =
@@ -601,52 +584,167 @@ function drawChart() {
 }
 
 
-/* =========================
-   ANALYSE BUTTON
-   ========================= */
+/* =========================================
+   POSITION MONITOR
+========================================= */
 
-function analyseMarket() {
+function monitorPosition() {
 
-    document.getElementById("status")
-        .textContent =
-        "Refreshing analysis...";
+    const entry =
+        Number(
+            document.getElementById("entryPrice").value
+        );
 
 
-    loadMarketData();
+    const target =
+        Number(
+            document.getElementById("targetPrice").value
+        );
+
+
+    const stop =
+        Number(
+            document.getElementById("stopLoss").value
+        );
+
+
+    if (
+        !entry ||
+        !target ||
+        !stop
+    ) {
+
+        document.getElementById("positionStatus").textContent =
+            "ENTER ALL VALUES";
+
+        return;
+
+    }
+
+
+    const current =
+        Number(
+            document.getElementById("currentPrice").textContent
+        );
+
+
+    if (!current) {
+
+        document.getElementById("positionStatus").textContent =
+            "PRICE NOT AVAILABLE";
+
+        return;
+
+    }
+
+
+    const profitLoss =
+        current - entry;
+
+
+    document.getElementById("positionEntry").textContent =
+        entry.toFixed(2);
+
+
+    document.getElementById("positionCurrent").textContent =
+        current.toFixed(2);
+
+
+    document.getElementById("positionTarget").textContent =
+        target.toFixed(2);
+
+
+    document.getElementById("positionStop").textContent =
+        stop.toFixed(2);
+
+
+    document.getElementById("positionPL").textContent =
+        profitLoss.toFixed(2);
+
+
+    let status;
+
+
+    /*
+     * Target reached
+     */
+
+    if (current >= target) {
+
+        status =
+            "🎯 TARGET REACHED";
+
+    }
+
+
+    /*
+     * Stop loss reached
+     */
+
+    else if (current <= stop) {
+
+        status =
+            "🛑 STOP LOSS LEVEL";
+
+    }
+
+
+    /*
+     * Profit
+     */
+
+    else if (current > entry) {
+
+        status =
+            "📈 IN PROFIT";
+
+    }
+
+
+    /*
+     * Loss
+     */
+
+    else if (current < entry) {
+
+        status =
+            "📉 IN LOSS";
+
+    }
+
+
+    /*
+     * Entry
+     */
+
+    else {
+
+        status =
+            "⏳ AT ENTRY";
+
+    }
+
+
+    document.getElementById("positionStatus").textContent =
+        status;
 
 }
 
 
-/* =========================
+/* =========================================
    AUTO REFRESH
-   ========================= */
+========================================= */
 
 loadMarketData();
 
 
-setInterval(
-    loadMarketData,
-    60000
-);
+setInterval(function() {
 
+    loadMarketData();
 
-/* =========================
-   RESIZE GRAPH
-   ========================= */
-
-window.addEventListener(
-    "resize",
-    function() {
-
-        drawChart();
-
-    }
-);
-
+}, 60000);
 
 </script>
 
-
 </body>
-
 </html>

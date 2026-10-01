@@ -1,12 +1,7 @@
-<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html><html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>Market AI</title>
-
-<style>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Market AI</title><style>
 body {
     margin: 0;
     font-family: Arial, sans-serif;
@@ -116,208 +111,211 @@ button:active {
     font-size: 13px;
     line-height: 1.5;
 }
-</style>
-</head>
 
-<body>
+.update-status {
+    text-align: center;
+    color: #aeb4c0;
+    font-size: 13px;
+    margin-top: 8px;
+}
 
-<div class="header">
+.error {
+    color: #ff6b6b;
+}
+</style></head><body><div class="header">
     <h1>📊 Market AI</h1>
     <p>Market Analysis & Position Monitor</p>
-</div>
+</div><div class="container"><!-- MARKET SELECT -->
 
-<div class="container">
-
-    <!-- MARKET SELECT -->
-
-    <select id="marketSelect" onchange="changeMarket()">
-        <option value="NIFTY">NIFTY 50</option>
-        <option value="BANKNIFTY">BANK NIFTY</option>
-        <option value="SENSEX">SENSEX</option>
-    </select>
+<select id="marketSelect" onchange="changeMarket()">
+    <option value="NIFTY">NIFTY 50</option>
+    <option value="BANKNIFTY">BANK NIFTY</option>
+    <option value="SENSEX">SENSEX</option>
+</select>
 
 
-    <!-- CURRENT PRICE -->
+<!-- CURRENT PRICE -->
 
-    <div class="price-box">
+<div class="price-box">
 
-        <p id="marketName">NIFTY 50</p>
+    <p id="marketName">NIFTY 50</p>
 
-        <div class="price" id="currentPrice">
-            --
-        </div>
-
-        <p>Live market data</p>
-
+    <div class="price" id="currentPrice">
+        --
     </div>
 
+    <p>Market data</p>
 
-    <!-- GRAPH -->
-
-    <div class="chart">
-        <canvas id="marketCanvas"></canvas>
-    </div>
-
-
-    <!-- MARKET ANALYSIS -->
-
-    <div class="analysis">
-
-        <h2>AI Market Analysis</h2>
-
-        <div class="signal" id="trendSignal">
-            ANALYSING...
-        </div>
-
-
-        <div class="info">
-            <span>Direction</span>
-            <strong id="direction">--</strong>
-        </div>
-
-
-        <div class="info">
-            <span>Current Price</span>
-            <strong id="analysisPrice">--</strong>
-        </div>
-
-
-        <div class="info">
-            <span>Support</span>
-            <strong id="support">--</strong>
-        </div>
-
-
-        <div class="info">
-            <span>Resistance</span>
-            <strong id="resistance">--</strong>
-        </div>
-
-
-        <div class="info">
-            <span>RSI 14</span>
-            <strong id="rsi">--</strong>
-        </div>
-
-
-        <div class="info">
-            <span>EMA 20</span>
-            <strong id="ema20">--</strong>
-        </div>
-
-
-        <div class="info">
-            <span>EMA 50</span>
-            <strong id="ema50">--</strong>
-        </div>
-
-
-        <div class="info">
-            <span>Market Signal</span>
-            <strong id="marketSignal">--</strong>
-        </div>
-
-
-        <button onclick="loadMarketData()">
-            🔄 REFRESH ANALYSIS
-        </button>
-
-    </div>
-
-
-    <!-- POSITION MONITOR -->
-
-    <div class="position-box">
-
-        <h2>📌 My Position</h2>
-
-        <p class="note">
-            Enter your trade details to monitor your position.
-        </p>
-
-
-        <label>Entry Price</label>
-
-        <input
-            type="number"
-            id="entryPrice"
-            placeholder="Example: 22400"
-            step="0.01"
-        >
-
-
-        <label>Target Price</label>
-
-        <input
-            type="number"
-            id="targetPrice"
-            placeholder="Example: 22500"
-            step="0.01"
-        >
-
-
-        <label>Stop Loss</label>
-
-        <input
-            type="number"
-            id="stopLoss"
-            placeholder="Example: 22350"
-            step="0.01"
-        >
-
-
-        <button onclick="monitorPosition()">
-            MONITOR POSITION
-        </button>
-
-
-        <div class="position-status" id="positionStatus">
-            NO POSITION
-        </div>
-
-
-        <div class="info">
-            <span>Entry</span>
-            <strong id="positionEntry">--</strong>
-        </div>
-
-
-        <div class="info">
-            <span>Current</span>
-            <strong id="positionCurrent">--</strong>
-        </div>
-
-
-        <div class="info">
-            <span>Target</span>
-            <strong id="positionTarget">--</strong>
-        </div>
-
-
-        <div class="info">
-            <span>Stop Loss</span>
-            <strong id="positionStop">--</strong>
-        </div>
-
-
-        <div class="info">
-            <span>P/L Points</span>
-            <strong id="positionPL">--</strong>
-        </div>
-
+    <div class="update-status" id="updateStatus">
+        Connecting...
     </div>
 
 </div>
 
 
-<script>
+<!-- GRAPH -->
+
+<div class="chart">
+    <canvas id="marketCanvas"></canvas>
+</div>
+
+
+<!-- MARKET ANALYSIS -->
+
+<div class="analysis">
+
+    <h2>AI Market Analysis</h2>
+
+    <div class="signal" id="trendSignal">
+        ANALYSING...
+    </div>
+
+
+    <div class="info">
+        <span>Direction</span>
+        <strong id="direction">--</strong>
+    </div>
+
+
+    <div class="info">
+        <span>Current Price</span>
+        <strong id="analysisPrice">--</strong>
+    </div>
+
+
+    <div class="info">
+        <span>Support</span>
+        <strong id="support">--</strong>
+    </div>
+
+
+    <div class="info">
+        <span>Resistance</span>
+        <strong id="resistance">--</strong>
+    </div>
+
+
+    <div class="info">
+        <span>RSI 14</span>
+        <strong id="rsi">--</strong>
+    </div>
+
+
+    <div class="info">
+        <span>EMA 20</span>
+        <strong id="ema20">--</strong>
+    </div>
+
+
+    <div class="info">
+        <span>EMA 50</span>
+        <strong id="ema50">--</strong>
+    </div>
+
+
+    <div class="info">
+        <span>Market Signal</span>
+        <strong id="marketSignal">--</strong>
+    </div>
+
+
+    <button onclick="loadMarketData()">
+        🔄 REFRESH ANALYSIS
+    </button>
+
+</div>
+
+
+<!-- POSITION MONITOR -->
+
+<div class="position-box">
+
+    <h2>📌 My Position</h2>
+
+    <p class="note">
+        Enter your trade details to monitor your position.
+    </p>
+
+
+    <label>Entry Price</label>
+
+    <input
+        type="number"
+        id="entryPrice"
+        placeholder="Example: 22400"
+        step="0.01"
+    >
+
+
+    <label>Target Price</label>
+
+    <input
+        type="number"
+        id="targetPrice"
+        placeholder="Example: 22500"
+        step="0.01"
+    >
+
+
+    <label>Stop Loss</label>
+
+    <input
+        type="number"
+        id="stopLoss"
+        placeholder="Example: 22350"
+        step="0.01"
+    >
+
+
+    <button onclick="monitorPosition()">
+        MONITOR POSITION
+    </button>
+
+
+    <div class="position-status" id="positionStatus">
+        NO POSITION
+    </div>
+
+
+    <div class="info">
+        <span>Entry</span>
+        <strong id="positionEntry">--</strong>
+    </div>
+
+
+    <div class="info">
+        <span>Current</span>
+        <strong id="positionCurrent">--</strong>
+    </div>
+
+
+    <div class="info">
+        <span>Target</span>
+        <strong id="positionTarget">--</strong>
+    </div>
+
+
+    <div class="info">
+        <span>Stop Loss</span>
+        <strong id="positionStop">--</strong>
+    </div>
+
+
+    <div class="info">
+        <span>P/L Points</span>
+        <strong id="positionPL">--</strong>
+    </div>
+
+</div>
+
+</div><script>
 
 /* =========================================
-   MARKET API
+   GOOGLE APPS SCRIPT WEB APP
 ========================================= */
 
 const API_URL =
-"https://script.google.com/macros/s/AKfycbxBaiPC7wP-y4U3y_bfEpsfq2BlMmVi0yHa2r-PAQAY6eH07BArhib92Tcg06Z8Q28Zsw/exec";
+"https://script.google.com/macros/s/AKfycbxXxS95jXMphM6ZDFaJlsbWZwYlpsIWs9Vc6Z1lf7SaXSPHpbOxSqdc1prjc8F1ca4aQw/exec";
 
 
 let prices = [];
@@ -356,14 +354,22 @@ function changeMarket() {
 
 async function loadMarketData() {
 
+    const status =
+        document.getElementById("updateStatus");
+
     try {
 
         document.getElementById("trendSignal").textContent =
             "LOADING...";
 
+        status.textContent =
+            "Updating market data...";
+
+        status.classList.remove("error");
+
 
         /*
-         * Send selected market to Google Apps Script
+         * Send selected market to Google Apps Script.
          */
 
         const url =
@@ -373,11 +379,32 @@ async function loadMarketData() {
 
 
         const response =
-            await fetch(url);
+            await fetch(
+                url,
+                {
+                    method: "GET",
+                    cache: "no-store"
+                }
+            );
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                "HTTP " + response.status
+            );
+
+        }
 
 
         const data =
             await response.json();
+
+
+        console.log(
+            "Market API response:",
+            data
+        );
 
 
         if (data.status !== "OK") {
@@ -385,96 +412,171 @@ async function loadMarketData() {
             document.getElementById("trendSignal").textContent =
                 "DATA ERROR";
 
-            console.log(data);
+            status.textContent =
+                data.message || "Market data error";
+
+            status.classList.add("error");
 
             return;
+
         }
 
 
-        /* Market name */
+        /* =========================================
+           MARKET NAME
+        ========================================= */
+
+        let displayName =
+            "NIFTY 50";
+
+
+        if (
+            data.symbol === "BANKNIFTY" ||
+            selectedMarket === "BANKNIFTY"
+        ) {
+
+            displayName =
+                "BANK NIFTY";
+
+        }
+
+        else if (
+            data.symbol === "SENSEX" ||
+            selectedMarket === "SENSEX"
+        ) {
+
+            displayName =
+                "SENSEX";
+
+        }
+
 
         document.getElementById("marketName").textContent =
-            data.symbol === "NIFTY"
-                ? "NIFTY 50"
-                : data.symbol === "BANKNIFTY"
-                ? "BANK NIFTY"
-                : "SENSEX";
+            displayName;
 
 
-        /* Current price */
+        /* =========================================
+           CURRENT PRICE
+        ========================================= */
 
-        document.getElementById("currentPrice").textContent =
-            Number(data.price).toFixed(2);
-
-
-        document.getElementById("analysisPrice").textContent =
-            Number(data.price).toFixed(2);
+        const price =
+            Number(data.price);
 
 
-        /* History */
+        if (!isNaN(price)) {
 
-        prices =
-            data.history.map(function(item) {
+            document.getElementById("currentPrice").textContent =
+                price.toFixed(2);
 
-                return Number(item.price);
+            document.getElementById("analysisPrice").textContent =
+                price.toFixed(2);
 
-            });
+        }
 
 
-        /* Technical analysis */
+        /* =========================================
+           HISTORY
+        ========================================= */
+
+        if (
+            Array.isArray(data.history)
+        ) {
+
+            prices =
+                data.history
+                .map(function(item) {
+
+                    return Number(item.price);
+
+                })
+                .filter(function(value) {
+
+                    return !isNaN(value);
+
+                });
+
+        }
+
+
+        /* =========================================
+           TECHNICAL ANALYSIS
+        ========================================= */
 
         if (data.analysis) {
 
+            const analysis =
+                data.analysis;
+
+
             document.getElementById("trendSignal").textContent =
-                data.analysis.trend || "--";
+                analysis.trend || "--";
 
 
             document.getElementById("direction").textContent =
-                data.analysis.trend || "--";
+                analysis.trend || "--";
 
 
             document.getElementById("support").textContent =
-                data.analysis.support !== null
-                ? Number(data.analysis.support).toFixed(2)
+                analysis.support != null
+                ? Number(analysis.support).toFixed(2)
                 : "--";
 
 
             document.getElementById("resistance").textContent =
-                data.analysis.resistance !== null
-                ? Number(data.analysis.resistance).toFixed(2)
+                analysis.resistance != null
+                ? Number(analysis.resistance).toFixed(2)
                 : "--";
 
 
             document.getElementById("rsi").textContent =
-                data.analysis.rsi14 !== null
-                ? Number(data.analysis.rsi14).toFixed(2)
+                analysis.rsi14 != null
+                ? Number(analysis.rsi14).toFixed(2)
                 : "--";
 
 
             document.getElementById("ema20").textContent =
-                data.analysis.ema20 !== null
-                ? Number(data.analysis.ema20).toFixed(2)
+                analysis.ema20 != null
+                ? Number(analysis.ema20).toFixed(2)
                 : "--";
 
 
             document.getElementById("ema50").textContent =
-                data.analysis.ema50 !== null
-                ? Number(data.analysis.ema50).toFixed(2)
+                analysis.ema50 != null
+                ? Number(analysis.ema50).toFixed(2)
                 : "--";
 
 
             document.getElementById("marketSignal").textContent =
-                data.analysis.signal || "--";
+                analysis.signal || "--";
 
         }
 
 
-        /* Draw graph */
+        /* =========================================
+           DRAW CHART
+        ========================================= */
 
         drawChart();
 
 
+        /* =========================================
+           UPDATE STATUS
+        ========================================= */
+
+        const now =
+            new Date();
+
+
+        status.textContent =
+            "Last updated: " +
+            now.toLocaleTimeString();
+
+
+        status.classList.remove("error");
+
+
         console.log(
+            "Market updated:",
             data.symbol,
             data.price
         );
@@ -483,7 +585,7 @@ async function loadMarketData() {
 
     catch (error) {
 
-        console.log(
+        console.error(
             "Market data error:",
             error
         );
@@ -491,6 +593,13 @@ async function loadMarketData() {
 
         document.getElementById("trendSignal").textContent =
             "CONNECTION ERROR";
+
+
+        status.textContent =
+            "Unable to connect to market API";
+
+
+        status.classList.add("error");
 
     }
 
@@ -503,17 +612,24 @@ async function loadMarketData() {
 
 function drawChart() {
 
-    if (!prices || prices.length < 2) {
+    if (
+        !prices ||
+        prices.length < 2
+    ) {
+
         return;
+
     }
 
 
     canvas.width =
-        canvas.clientWidth * devicePixelRatio;
+        canvas.clientWidth *
+        devicePixelRatio;
 
 
     canvas.height =
-        canvas.clientHeight * devicePixelRatio;
+        canvas.clientHeight *
+        devicePixelRatio;
 
 
     ctx.setTransform(
@@ -557,33 +673,41 @@ function drawChart() {
     ctx.beginPath();
 
 
-    prices.forEach(function(price, i) {
+    prices.forEach(
+        function(price, i) {
 
-        const x =
-            (i / (prices.length - 1)) *
-            width;
-
-
-        const y =
-            height -
-            ((price - min) / range) *
-            (height - 30) -
-            15;
+            const x =
+                (i / (prices.length - 1)) *
+                width;
 
 
-        if (i === 0) {
+            const y =
+                height -
+                ((price - min) / range) *
+                (height - 30) -
+                15;
 
-            ctx.moveTo(x, y);
+
+            if (i === 0) {
+
+                ctx.moveTo(
+                    x,
+                    y
+                );
+
+            }
+
+            else {
+
+                ctx.lineTo(
+                    x,
+                    y
+                );
+
+            }
 
         }
-
-        else {
-
-            ctx.lineTo(x, y);
-
-        }
-
-    });
+    );
 
 
     ctx.strokeStyle =
@@ -607,25 +731,37 @@ function monitorPosition() {
 
     const entry =
         Number(
-            document.getElementById("entryPrice").value
+            document.getElementById(
+                "entryPrice"
+            ).value
         );
 
 
     const target =
         Number(
-            document.getElementById("targetPrice").value
+            document.getElementById(
+                "targetPrice"
+            ).value
         );
 
 
     const stop =
         Number(
-            document.getElementById("stopLoss").value
+            document.getElementById(
+                "stopLoss"
+            ).value
         );
 
 
-    if (!entry || !target || !stop) {
+    if (
+        !entry ||
+        !target ||
+        !stop
+    ) {
 
-        document.getElementById("positionStatus").textContent =
+        document.getElementById(
+            "positionStatus"
+        ).textContent =
             "ENTER ALL VALUES";
 
         return;
@@ -635,13 +771,17 @@ function monitorPosition() {
 
     const current =
         Number(
-            document.getElementById("currentPrice").textContent
+            document.getElementById(
+                "currentPrice"
+            ).textContent
         );
 
 
     if (!current) {
 
-        document.getElementById("positionStatus").textContent =
+        document.getElementById(
+            "positionStatus"
+        ).textContent =
             "PRICE NOT AVAILABLE";
 
         return;
@@ -653,89 +793,111 @@ function monitorPosition() {
         current - entry;
 
 
-    document.getElementById("positionEntry").textContent =
+    document.getElementById(
+        "positionEntry"
+    ).textContent =
         entry.toFixed(2);
 
 
-    document.getElementById("positionCurrent").textContent =
+    document.getElementById(
+        "positionCurrent"
+    ).textContent =
         current.toFixed(2);
 
 
-    document.getElementById("positionTarget").textContent =
+    document.getElementById(
+        "positionTarget"
+    ).textContent =
         target.toFixed(2);
 
 
-    document.getElementById("positionStop").textContent =
+    document.getElementById(
+        "positionStop"
+    ).textContent =
         stop.toFixed(2);
 
 
-    document.getElementById("positionPL").textContent =
+    document.getElementById(
+        "positionPL"
+    ).textContent =
         profitLoss.toFixed(2);
 
 
-    let status;
+    let positionStatus;
 
 
-    if (current >= target) {
+    if (
+        current >= target
+    ) {
 
-        status =
+        positionStatus =
             "🎯 TARGET REACHED";
 
     }
 
-    else if (current <= stop) {
+    else if (
+        current <= stop
+    ) {
 
-        status =
+        positionStatus =
             "🛑 STOP LOSS LEVEL";
 
     }
 
-    else if (current > entry) {
+    else if (
+        current > entry
+    ) {
 
-        status =
+        positionStatus =
             "📈 IN PROFIT";
 
     }
 
-    else if (current < entry) {
+    else if (
+        current < entry
+    ) {
 
-        status =
+        positionStatus =
             "📉 IN LOSS";
 
     }
 
     else {
 
-        status =
+        positionStatus =
             "⏳ AT ENTRY";
 
     }
 
 
-    document.getElementById("positionStatus").textContent =
-        status;
+    document.getElementById(
+        "positionStatus"
+    ).textContent =
+        positionStatus;
 
 }
 
 
 /* =========================================
-   START
+   INITIAL LOAD
 ========================================= */
 
 loadMarketData();
 
 
 /* =========================================
-   AUTO REFRESH EVERY 60 SECONDS
+   AUTOMATIC REFRESH
+   Every 60 seconds
 ========================================= */
 
-setInterval(function() {
+setInterval(
+    function() {
 
-    loadMarketData();
+        loadMarketData();
 
-}, 60000);
+    },
+    900000
+);
 
-</script>
-
-</body>
+</script></body>
 </html>

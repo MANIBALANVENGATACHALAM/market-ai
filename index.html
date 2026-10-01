@@ -1,17 +1,166 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>Market AI</title>
+
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #10131a;
+            color: white;
+        }
+
+        .header {
+            padding: 20px;
+            text-align: center;
+            background: #171b24;
+        }
+
+        .header h1 {
+            margin: 0;
+        }
+
+        .container {
+            padding: 15px;
+            max-width: 600px;
+            margin: auto;
+        }
+
+        select {
+            width: 100%;
+            padding: 14px;
+            border-radius: 10px;
+            border: none;
+            font-size: 16px;
+            margin-bottom: 15px;
+        }
+
+        .price-box {
+            background: #171b24;
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 15px;
+        }
+
+        .price {
+            font-size: 32px;
+            font-weight: bold;
+        }
+
+        .chart {
+            height: 250px;
+            background: #171b24;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 15px;
+            color: #888;
+        }
+
+        .analysis {
+            background: #171b24;
+            padding: 20px;
+            border-radius: 15px;
+        }
+
+        .signal {
+            font-size: 28px;
+            font-weight: bold;
+            text-align: center;
+            margin: 15px 0;
+        }
+
+        .buy {
+            color: #00d084;
+        }
+
+        .info {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #292e38;
+        }
+
+        button {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 10px;
+            background: #2563eb;
+            color: white;
+            font-size: 17px;
+            margin-top: 15px;
+        }
+    </style>
 </head>
 
 <body>
-    <h1>Market AI</h1>
 
-    <h2>NIFTY 50</h2>
+    <div class="header">
+        <h1>📊 Market AI</h1>
+        <p>Personal Market Analysis</p>
+    </div>
 
-    <p>Market analysis will appear here.</p>
+    <div class="container">
 
-    <button>ANALYSE</button>
+        <select>
+            <option>NIFTY 50</option>
+            <option>SENSEX</option>
+        </select>
+
+        <div class="price-box">
+            <p>Current Price</p>
+            <div class="price">--</div>
+            <p>Live data will be connected later</p>
+        </div>
+
+        <div class="chart">
+            📈 GRAPH WILL APPEAR HERE
+        </div>
+
+        <div class="analysis">
+
+            <h2>AI Analysis</h2>
+
+            <div class="signal buy">
+                WAIT
+            </div>
+
+            <div class="info">
+                <span>Direction</span>
+                <strong>--</strong>
+            </div>
+
+            <div class="info">
+                <span>Confidence</span>
+                <strong>--%</strong>
+            </div>
+
+            <div class="info">
+                <span>Entry</span>
+                <strong>--</strong>
+            </div>
+
+            <div class="info">
+                <span>Target</span>
+                <strong>--</strong>
+            </div>
+
+            <div class="info">
+                <span>Stop Loss</span>
+                <strong>--</strong>
+            </div>
+
+            <button>ANALYSE MARKET</button>
+
+        </div>
+
+    </div>
+
 </body>
 </html>

@@ -39,11 +39,16 @@
             margin-bottom: 15px;
         }
 
-        .price-box {
+        .price-box,
+        .chart,
+        .analysis {
             background: #171b24;
-            padding: 20px;
             border-radius: 15px;
             margin-bottom: 15px;
+        }
+
+        .price-box {
+            padding: 20px;
         }
 
         .price {
@@ -52,23 +57,18 @@
         }
 
         .chart {
-    height: 300px;
-    background: #171b24;
-    border-radius: 15px;
-    margin-bottom: 15px;
-    padding: 10px;
-    box-sizing: border-box;
-}
+            height: 300px;
+            padding: 10px;
+            box-sizing: border-box;
+        }
 
-#marketCanvas {
-    width: 100%;
-    height: 100%;
-}
+        #marketCanvas {
+            width: 100%;
+            height: 100%;
+        }
 
         .analysis {
-            background: #171b24;
             padding: 20px;
-            border-radius: 15px;
         }
 
         .signal {
@@ -76,10 +76,6 @@
             font-weight: bold;
             text-align: center;
             margin: 15px 0;
-        }
-
-        .buy {
-            color: #00d084;
         }
 
         .info {
@@ -104,226 +100,306 @@
 
 <body>
 
-    <div class="header">
-        <h1>📊 Market AI</h1>
-        <p>Personal Market Analysis</p>
-    </div>
-
-    <div class="container">
-
-        <select>
-            <option>NIFTY 50</option>
-            <option>SENSEX</option>
-        </select>
-
-        <div class="price-box">
-            <p>Current Price</p>
-            <div class="price">--</div>
-            <p>Live data will be connected later</p>
-        </div>
-
-        <div class="chart" id="niftyChart">
-    <canvas id="marketCanvas"></canvas>
+<div class="header">
+    <h1>📊 Market AI</h1>
+    <p>Personal Market Analysis</p>
 </div>
 
-        <div class="analysis">
+<div class="container">
 
-    <h2>AI Market Analysis</h2>
+    <select>
+        <option>NIFTY 50</option>
+        <option>SENSEX</option>
+    </select>
 
-    <div class="signal" id="trendSignal">
-        ANALYSING...
+    <div class="price-box">
+        <p>Current Price</p>
+
+        <div class="price">--</div>
+
+        <p>Live market data</p>
     </div>
 
-    <div class="info">
-        <span>Direction</span>
-        <strong id="direction">--</strong>
+    <div class="chart">
+        <canvas id="marketCanvas"></canvas>
     </div>
 
-    <div class="info">
-        <span>Current Price</span>
-        <strong id="analysisPrice">--</strong>
-    </div>
+    <div class="analysis">
 
-    <div class="info">
-        <span>Support</span>
-        <strong id="support">--</strong>
-    </div>
+        <h2>AI Market Analysis</h2>
 
-    <div class="info">
-        <span>Resistance</span>
-        <strong id="resistance">--</strong>
-    </div>
-
-    <div class="info">
-        <span>Market Signal</span>
-        <strong id="marketSignal">--</strong>
-    </div>
-
-    <button onclick="analyseMarket()">
-        ANALYSE MARKET
-    </button>
-
+        <div class="signal" id="trendSignal">
+            ANALYSING...
         </div>
 
-            <div class="info">
-                <span>Direction</span>
-                <strong>--</strong>
-            </div>
-
-            <div class="info">
-                <span>Confidence</span>
-                <strong>--%</strong>
-            </div>
-
-            <div class="info">
-                <span>Entry</span>
-                <strong>--</strong>
-            </div>
-
-            <div class="info">
-                <span>Target</span>
-                <strong>--</strong>
-            </div>
-
-            <div class="info">
-                <span>Stop Loss</span>
-                <strong>--</strong>
-            </div>
-
-            <button>ANALYSE MARKET</button>
-
+        <div class="info">
+            <span>Direction</span>
+            <strong id="direction">--</strong>
         </div>
 
+        <div class="info">
+            <span>Current Price</span>
+            <strong id="analysisPrice">--</strong>
+        </div>
+
+        <div class="info">
+            <span>Support</span>
+            <strong id="support">--</strong>
+        </div>
+
+        <div class="info">
+            <span>Resistance</span>
+            <strong id="resistance">--</strong>
+        </div>
+
+        <div class="info">
+            <span>Market Signal</span>
+            <strong id="marketSignal">--</strong>
+        </div>
+
+        <button onclick="analyseMarket()">
+            ANALYSE MARKET
+        </button>
+
     </div>
+
+</div>
+
+
 <script>
+
+let prices = [];
+
 const canvas = document.getElementById("marketCanvas");
 const ctx = canvas.getContext("2d");
 
-async function drawDemoChart() {
-    canvas.width = canvas.clientWidth * devicePixelRatio;
-    canvas.height = canvas.clientHeight * devicePixelRatio;
+const API_URL =
+"https://script.google.com/macros/s/AKfycbxBaiPC7wP-y4U3y_bfEpsfq2BlMmVi0yHa2r-PAQAY6eH07BArhib92Tcg06Z8Q28Zsw/exec";
 
-    ctx.scale(devicePixelRatio, devicePixelRatio);
+
+async function loadMarketData() {
+
+    try {
+
+        const response = await fetch(API_URL);
+
+        const data = await response.json();
+
+        if (data.status !== "OK") {
+            console.log("API error");
+            return;
+        }
+
+        /* Current price */
+
+        document.querySelector(".price").textContent =
+            data.price.toFixed(2);
+
+
+        /* Historical prices */
+
+        prices = data.history.map(function(item) {
+            return item.price;
+        });
+
+
+        /* Draw chart */
+
+        drawChart();
+
+
+        console.log("NIFTY 50:", data.price);
+
+    }
+
+    catch (error) {
+
+        console.log("Market data error:", error);
+
+    }
+
+}
+
+
+function drawChart() {
+
+    if (!prices || prices.length === 0) {
+        return;
+    }
+
+
+    canvas.width =
+        canvas.clientWidth * devicePixelRatio;
+
+    canvas.height =
+        canvas.clientHeight * devicePixelRatio;
+
+
+    ctx.setTransform(
+        devicePixelRatio,
+        0,
+        0,
+        devicePixelRatio,
+        0,
+        0
+    );
+
 
     const width = canvas.clientWidth;
     const height = canvas.clientHeight;
 
-    ctx.clearRect(0, 0, width, height);
 
-    const response = await fetch(
-    "https://script.google.com/macros/s/AKfycbxBaiPC7wP-y4U3y_bfEpsfq2BlMmVi0yHa2r-PAQAY6eH07BArhib92Tcg06Z8Q28Zsw/exec"
-);
+    ctx.clearRect(
+        0,
+        0,
+        width,
+        height
+    );
 
-const data = await response.json();
 
-window.prices = data.history.map(item => item.price);
-document.querySelector(".price").textContent =
-    data.price.toFixed(2);
+    const min =
+        Math.min(...prices);
 
-    const min = Math.min(...prices);
-    const max = Math.max(...prices);
+    const max =
+        Math.max(...prices);
+
 
     ctx.beginPath();
 
-    prices.forEach((price, i) => {
-        const x = (i / (prices.length - 1)) * width;
-        const y = height - ((price - min) / (max - min)) * (height - 30) - 15;
+
+    prices.forEach(function(price, i) {
+
+        const x =
+            (i / (prices.length - 1)) * width;
+
+
+        const y =
+            height -
+            ((price - min) / (max - min)) *
+            (height - 30) -
+            15;
+
 
         if (i === 0) {
+
             ctx.moveTo(x, y);
+
         } else {
+
             ctx.lineTo(x, y);
+
         }
+
     });
 
+
     ctx.strokeStyle = "#00d084";
+
     ctx.lineWidth = 3;
+
     ctx.stroke();
+
 }
 
-drawDemoChart();
-</script>
-    <script>
-        
-async function loadMarketData() {
-    try {
-        const response = await fetch(
-            "https://script.google.com/macros/s/AKfycbxBaiPC7wP-y4U3y_bfEpsfq2BlMmVi0yHa2r-PAQAY6eH07BArhib92Tcg06Z8Q28Zsw/exec"
-        );
 
-        const data = await response.json();
-
-        if (data.status === "OK") {
-            document.querySelector(".price").textContent =
-                data.price.toFixed(2);
-
-            console.log("NIFTY 50:", data.price);
-        }
-
-    } catch (error) {
-        console.log("Market data error:", error);
-    }
-}
-
-loadMarketData();
-    </script>
-    <script>
+/* MARKET ANALYSIS */
 
 function analyseMarket() {
 
-    if (!window.prices || window.prices.length < 10) {
+    if (!prices || prices.length < 10) {
+
         document.getElementById("trendSignal").textContent =
             "DATA NOT AVAILABLE";
+
         return;
     }
 
+
     const current =
-        window.prices[window.prices.length - 1];
+        prices[prices.length - 1];
+
 
     const recent =
-        window.prices.slice(-10);
+        prices.slice(-10);
 
-    const previous = recent[0];
 
-    const change = current - previous;
+    const previous =
+        recent[0];
 
-    const highest = Math.max(...recent);
-    const lowest = Math.min(...recent);
+
+    const change =
+        current - previous;
+
+
+    const highest =
+        Math.max(...recent);
+
+
+    const lowest =
+        Math.min(...recent);
+
 
     let direction;
+
     let signal;
 
+
     if (change > 0) {
+
         direction = "UP";
+
         signal = "WATCH FOR BUY";
-    } else if (change < 0) {
-        direction = "DOWN";
-        signal = "WATCH FOR SELL";
-    } else {
-        direction = "SIDEWAYS";
-        signal = "WAIT";
+
     }
+
+    else if (change < 0) {
+
+        direction = "DOWN";
+
+        signal = "WATCH FOR SELL";
+
+    }
+
+    else {
+
+        direction = "SIDEWAYS";
+
+        signal = "WAIT";
+
+    }
+
 
     document.getElementById("trendSignal").textContent =
         direction;
 
+
     document.getElementById("direction").textContent =
         direction;
+
 
     document.getElementById("analysisPrice").textContent =
         current.toFixed(2);
 
+
     document.getElementById("support").textContent =
         lowest.toFixed(2);
+
 
     document.getElementById("resistance").textContent =
         highest.toFixed(2);
 
+
     document.getElementById("marketSignal").textContent =
         signal;
+
 }
 
-    </script>
+
+/* START */
+
+loadMarketData();
+
+</script>
 
 </body>
 </html>
